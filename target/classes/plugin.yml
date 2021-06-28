@@ -1,0 +1,17 @@
+main: com.worldgroup.coa.App
+name: WorldGroupTp
+version: 0.5
+author: Coa
+description: Extension to the worldpos plugin by mike724
+commands:
+  worldgrouptp:
+    description: Teleports player to a worldgroup
+    usage: /worldgrouptp <player> <worldgroup>
+  createwg:
+    description: Makes a new worldgroup
+    usage: /createwg <name>
+    permission: worldgrouptp.admin
+  addwg:
+    description: Adds world to worldgroup
+    usage: /addwg <worldgroup> <world>
+    permission: worldgrouptp.admin
