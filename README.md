@@ -8,5 +8,7 @@ This plugin is currently used as an extension of the [WorldPos plugin my mike726
 
 ## Usage
 - /createwg *<name*> - creates a worldgroup with the given name
-- /addwg *<worldgroup*>*<world*> - add a world to the worldgroup
+- /addworld *<worldgroup*>*<world*> - add a world to the worldgroup
+- /listwg - lists all worldgroups
+- /deletewg *<worldgroup*> - deletes specified worldgroup
 - /worldgrouptp *<player*>*<worldgroup*> - teleports the player to the last world he was in inside of the worldgroup.
