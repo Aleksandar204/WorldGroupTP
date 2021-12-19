@@ -27,7 +27,6 @@ public class WorldEvent implements Listener
     public void ChangedWorld(PlayerChangedWorldEvent event)
     {
         //Bukkit.broadcastMessage("Player " + event.getPlayer() + " is going from world " + event.getFrom() + " to " + event.getPlayer().getWorld());
-        World w = event.getPlayer().getWorld();
         File f = App.dat;
         File[] subdirectories = f.listFiles(new FilenameFilter()
             {

@@ -34,6 +34,18 @@ public class App extends JavaPlugin {
     public void onDisable() {
         getLogger().info("Copyright Coa 2021");
     }
+
+    void deleteDir(File file) {
+        File[] contents = file.listFiles();
+        if (contents != null) {
+            for (File f : contents) {
+                if (! Files.isSymbolicLink(f.toPath())) {
+                    deleteDir(f);
+                }
+            }
+        }
+        file.delete();
+    }
     
     @Override
     public boolean onCommand(CommandSender sender,
@@ -42,27 +54,69 @@ public class App extends JavaPlugin {
                              String[] args) {
         if (command.getName().equalsIgnoreCase("createwg"))
         {
-            //sender.sendMessage(sender.getName() + " ran /create!");
-            
+            if(args.length != 1)
+            {
+                sender.sendMessage("Please enter one argument for worldgroup name!");
+                return false;
+            }
             File folder = new File(getDataFolder(), args[0]);
             File wginfo = new File(getDataFolder() + File.separator + args[0] + File.separator + "info.wg");
             folder.mkdir();
             try {
                 wginfo.createNewFile();
             } catch (Exception e) {
-                //TODO: handle exception
+                sender.sendMessage("Error when accessing worldgroup files!");
+                return false;
             }
+            sender.sendMessage("Created new worldgroup " + args[0]);
             return true;
         }
-        if(command.getName().equalsIgnoreCase("addwg"))
+        if(command.getName().equalsIgnoreCase("addworld"))
         {
+            if(args.length != 2)
+            {
+                sender.sendMessage("Please enter worldgroup and world name!");
+                return false;
+            }
             try {
                 FileWriter fw = new FileWriter(getDataFolder() + File.separator + args[0] + File.separator + "info.wg",true);
                 fw.write(args[1] + "\n");
                 fw.close();
             } catch (Exception e) {
-                //TODO: handle exception
-            }            
+                sender.sendMessage("Error when accessing worldgroup files!");
+                return false;
+            }    
+            sender.sendMessage("Added world to worldgroup " + args[0]);
+            return true;        
+        }
+        if(command.getName().equalsIgnoreCase("listwg"))
+        {
+            String[] dirs = getDataFolder().list();
+            sender.sendMessage(String.join(", ", dirs));
+
+            return true;
+        }
+        if(command.getName().equalsIgnoreCase("deletewg"))
+        {
+            if(args.length != 1)
+            {
+                sender.sendMessage("Please enter worldgroup to delete!");
+                return false;
+            }
+            try {
+                File[] contents = new File(getDataFolder() + File.separator + args[0]).listFiles();
+                if(contents != null)
+                {
+                    for(File f: contents){
+                        deleteDir(f);
+                    }
+                }
+                new File(getDataFolder() + File.separator + args[0]).delete();
+            } catch (Exception e) {
+                sender.sendMessage("Error when accessing worldgroup files!");
+                return false;
+            }
+            return true;
         }
         if(command.getName().equalsIgnoreCase("worldgrouptp"))
         {
@@ -76,6 +130,7 @@ public class App extends JavaPlugin {
                     String content = Files.readString(filename);
                     Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"worldwarp " + args[0] + " " + content);
                     //Bukkit.broadcastMessage("/worldwarp " + args[0] + " " + content);
+                    return true;
                 }
                 else
                 {
@@ -85,9 +140,11 @@ public class App extends JavaPlugin {
                     String arr[] = c.split("\n", 2);
                     //Bukkit.broadcastMessage("/worldwarp " + args[0] + " " + arr[0]);
                     Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"worldwarp " + args[0] + " " + arr[0]);
+                    return true;
                 }
                 
-            } catch (Exception e) {     
+            } catch (Exception e) {   
+                return false;
             }
         }
        
